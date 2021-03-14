@@ -1,5 +1,5 @@
 // IMPORT ALL THE THINGS NEEDED FROM OTHER JAVASCRIPT SOURCE FILES
-import React, { Component } from 'react'
+import React, { Component, ref } from 'react'
 
 class ListLink extends Component {
     constructor(props) {
@@ -20,12 +20,14 @@ class ListLink extends Component {
 
     render() {
         // DISPLAY WHERE WE ARE
+        //console.log("this color is: " + this.props.toDoList.color);
         console.log("\t\t\tListLink render");
-
+        //this is listlink
         return (
             <div 
                 className='todo-list-button'
                 onClick={this.handleLoadList}
+                style = {{background: this.props.toDoList.color}}
             >
                 {this.props.toDoList.name}<br />
             </div>

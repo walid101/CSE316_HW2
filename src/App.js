@@ -15,10 +15,10 @@ class App extends Component {
   constructor(props) {
     // ALWAYS DO THIS FIRST
     super(props);
-
+    //this.myRef = React.createRef();
     // DISPLAY WHERE WE ARE
     console.log("App constructor");
-
+    this.deleteListMod = this.deleteListMod.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
     this.tps = new jsTPS();
 
@@ -64,8 +64,16 @@ class App extends Component {
     const nextLists = this.state.toDoLists.filter(testList =>
       testList.id !== toDoList.id
     );
-    nextLists.unshift(toDoList);
-
+    nextLists.unshift(toDoList);//list of lists
+    //We want to always make sure top list is colored, rest is black! How to get the div elem?
+    
+    for(let i = 0; i<this.state.toDoLists.length; i++)
+    {
+      if(this.state.toDoLists[i].id == toDoList.id)
+      {this.state.toDoLists[i].color = '#ffc819'}
+      else{this.state.toDoLists[i].color = '#353a44';}
+    }
+    
     this.setState({
       toDoLists: nextLists,
       currentList: toDoList
@@ -74,9 +82,9 @@ class App extends Component {
 
   addNewList = () => {
     let newToDoListInList = [this.makeNewToDoList()];
+    //[...newToDoListInList, ...this.state.toDoLists];
     let newToDoListsList = [...newToDoListInList, ...this.state.toDoLists];
-    let newToDoList = newToDoListInList[0];
-
+    let newToDoList = newToDoListsList[0];
     // AND SET THE STATE, WHICH SHOULD FORCE A render
     this.setState({
       toDoLists: newToDoListsList,
@@ -86,8 +94,9 @@ class App extends Component {
   }
 
   makeNewToDoList = () => {
+    //console.log("new ListId Prev: " + this.highListId);
     let newToDoList = {
-      id: this.highListId,
+      id: this.state.nextListId,
       name: 'Untitled',
       items: []
     };
@@ -112,8 +121,36 @@ class App extends Component {
     localStorage.setItem("recent_work", toDoListsString);
   }
 
+  deleteListMod()
+  {
+    console.log("Delete the List!");
+    //check if current list is null, if so nothing to do
+    //once we implement fool proof design ^ probably wont be needed
+    if(this.state.currentList != null)
+    {
+      const nextLists = this.state.toDoLists.filter(testList =>
+        testList.id !== this.state.currentList.id
+      );
+      //list gone
+      //nextLists.unshift(toDoList);//list of lists
+      //We want to always make sure top list is colored, rest is black! How to get the div elem?
+      
+      for(let i = 0; i<this.state.toDoLists.length; i++)
+      {
+        this.state.toDoLists[i].color = '#353a44';
+      }
+      
+      this.setState({
+        toDoLists: nextLists,
+        currentList: null
+      });
+    }
+  }
   render() {
-    let items = this.state.currentList.items;
+    let items;
+    if(this.state.currentList != null)
+    {items = this.state.currentList.items;}
+    else{items = [];}
     return (
       <div id="root">
         <Navbar />
@@ -122,7 +159,10 @@ class App extends Component {
           loadToDoListCallback={this.loadToDoList}
           addNewListCallback={this.addNewList}
         />
-        <Workspace toDoListItems={items} />
+        <Workspace 
+          toDoListItems={items} 
+          deleteListMod = {this.deleteListMod}
+        />
       </div>
     );
   }

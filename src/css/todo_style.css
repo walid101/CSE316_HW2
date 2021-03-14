@@ -110,3 +110,57 @@
 #add-item-button, #delete-list-button, #close-list-button {
     text-align: center;
 }
+.modal {
+    display: none;/*hiding the modal*/
+    position: fixed;
+    /*Order of Display:*/
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    
+    overflow: auto;
+    background-color: rgba(0,0,0, 0.45);
+}
+.modal-content {
+    background-color: rgba(255,255,255);
+    margin: 20% auto;
+    width: 50%;
+    height: 25%;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.3), 0 7px 20px 0 rgba(0,0,0,0.3);
+    animation-name: modalopen;
+    animation-duration: 1s;
+    color: black;
+}
+.modal-header h2{
+    margin: 0;
+}
+.modal-header{
+    background: coral;
+    padding: 15px;
+    color: #fff;
+}
+.xBtn {
+    color: #fff;
+    float: right;
+    font-size: 30px;
+    padding: 10px;
+}
+.xBtn:hover, .xBtn:focus {
+    color:rgba(0,0,0);
+    text-decoration: none;
+    cursor:pointer;
+
+}
+.yBtn {
+    color: #fff;
+    float: right;
+    font-size: 20px;
+    padding: 15px;
+}
+.yBtn:hover, .yBtn:focus {
+    color:rgba(0,0,0);
+    text-decoration: none;
+    cursor:pointer;
+}
