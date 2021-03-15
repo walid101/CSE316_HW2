@@ -7,6 +7,9 @@ import jsTPS from './common/jsTPS' // WE NEED THIS TOO
 import Navbar from './components/Navbar'
 import LeftSidebar from './components/LeftSidebar'
 import Workspace from './components/Workspace'
+
+//IMPORT TRANSACTIONS HERE
+import AddNewItem_Transaction from './transactions/AddNewItem_Transaction'
 {/*import ItemsListHeaderComponent from './components/ItemsListHeaderComponent'
 import ItemsListComponent from './components/ItemsListComponent'
 import ListsComponent from './components/ListsComponent'
@@ -19,10 +22,13 @@ class App extends Component {
     // DISPLAY WHERE WE ARE
     console.log("App constructor");
     this.deleteListMod = this.deleteListMod.bind(this);
-    this.addNewItem = this.addNewItem.bind(this);
+    this.addNewItemTransaction = this.addNewItemTransaction.bind(this);
     this.moveItemUp = this.moveItemUp.bind(this);
     this.moveItemDown = this.moveItemDown.bind(this);
     this.deleteListItem = this.deleteListItem.bind(this);
+    this.addNewItem = this.addNewItem.bind(this);
+    this.undo = this.undo.bind(this);
+    this.redo = this.redo.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
     this.tps = new jsTPS();
 
@@ -229,6 +235,30 @@ class App extends Component {
       });
     }
   }
+  addNewItemTransaction()
+  {
+    let transaction = new AddNewItem_Transaction(this);
+    this.tps.addTransaction(transaction);
+  }
+
+
+
+  /**
+     * Undo the most recently done transaction if there is one.
+     */
+   undo() {
+    if (this.tps.hasTransactionToUndo()) {
+        this.tps.undoTransaction();
+    }
+  }  
+    /**
+     * Redo the current transaction if there is one.
+     */
+     redo() {
+      if (this.tps.hasTransactionToRedo()) {
+          this.tps.doTransaction();
+      }
+  }   
   render() {
     let items;
     if(this.state.currentList != null)
@@ -245,10 +275,12 @@ class App extends Component {
         <Workspace 
           toDoListItems={items} 
           deleteListMod = {this.deleteListMod}
-          addNewItem = {this.addNewItem}
+          addNewItemTransaction = {this.addNewItemTransaction}
           moveItemUp = {this.moveItemUp}
           moveItemDown = {this.moveItemDown}
           deleteListItem = {this.deleteListItem}
+          undo = {this.undo}
+          redo = {this.redo}
         />
       </div>
     );
