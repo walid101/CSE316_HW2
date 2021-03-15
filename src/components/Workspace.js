@@ -61,6 +61,9 @@ class Workspace extends Component {
                     <ToDoItem
                         key={toDoListItem.id}
                         toDoListItem={toDoListItem}     // PASS THE ITEM TO THE CHILDREN
+                        moveItemUp = {myProps.moveItemUp}
+                        moveItemDown = {myProps.moveItemDown}
+                        deleteListItem = {myProps.deleteListItem}
                     />))
                 }
                 </div>

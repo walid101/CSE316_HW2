@@ -54,14 +54,16 @@ class ToDoItem extends Component {
                                 //this.removeAllChildNodes("task-item-" + listItem.id);
                                 let textElement = document.createTextNode(text);
                                 taskItemElement.appendChild(textElement);
+                                listItem.description = text;
                             }
                         };
-                        textField.change = (event) => {
+                        textField.onchange = (event) => {
                             // REMOVE THE TEXT FIELD
                             taskItemElement.textContent = "";
                             let text = textField.value;
                             let textElement = document.createTextNode(text);
                             taskItemElement.appendChild(textElement);
+                            listItem.description = text;
                             //taskItemElement.textContent = "";
                             //let textElement = document.createTextNode(text);
                             //taskItemElement.appendChild(textElement);
@@ -72,6 +74,7 @@ class ToDoItem extends Component {
                 }}>{listItem.description}</div>
                 <div className='item-col due-date-col' id = {'due-date-item-'+listItem.id}
                 onMouseDown = { () => {
+                //console.log("THE ID IS: " + listItem.id);
                 let dueDateItemElement = document.getElementById("due-date-item-" + listItem.id);
                 if (dueDateItemElement.childElementCount === 0) {
                     dueDateItemElement.textContent = "";
@@ -92,15 +95,17 @@ class ToDoItem extends Component {
                             // Trigger the button element with a click
                             let dateValue = datePicker.value;
                             //this.controller.handleUpdateItem(listItem, listItem.getDescription(), dateValue, listItem.getStatus());
-
+                            listItem.dueDate = dateValue;
                         }
                     };
-                    datePicker.onchange = (event) => {
+                    datePicker.onchange = () => {
                         // REMOVE THE TEXT FIELD
+                        console.log("date was changed!");
                         let date = datePicker.value;
                         let dateElement = document.createTextNode(date);
                         dueDateItemElement.textContent = "";
                         dueDateItemElement.appendChild(dateElement);
+                        listItem.due_date = date;
                         //let dateValue = datePicker.value;
                         //this.controller.handleUpdateItem(listItem, listItem.getDescription(), dateValue, listItem.getStatus());
                     };
@@ -109,6 +114,7 @@ class ToDoItem extends Component {
                 <div className='item-col status-col' className={statusType} id = {'status-item-'+listItem.id}
                 onMouseDown = {() => {
                     let statusItemElement = document.getElementById("status-item-" + listItem.id);
+                    //statusItemElement.style.color = 'coral';
                     if (statusItemElement.childElementCount === 0) {
                         statusItemElement.textContent = "";
                         let dropDownMenu = document.createElement("select");
@@ -126,37 +132,37 @@ class ToDoItem extends Component {
                         //this.removeAllChildNodes("status-item-" + listItem.id);
                         //statusItemElement.textContent = "";
                         statusItemElement.appendChild(dropDownMenu);
-                        dropDownMenu.onchange = (event) => {
+                        dropDownMenu.onchange = () => {
                             // REMOVE THE TEXT FIELD
-                            console.log("SELECTED!");
+                            //console.log("SELECTED!");
                             statusItemElement.textContent = "";
                             let statusValue = dropDownMenu.value;
                             let statElement = document.createTextNode(statusValue);
                             statusItemElement.appendChild(statElement);
                             if(statusValue === "Complete"){statusItemElement.style.color = '#19c8ff';}
                             else{statusItemElement.style.color = 'coral';}
+                            listItem.status = statusValue;
                             //SAVE VAL
                             //this.controller.handleUpdateItem(listItem, listItem.getDescription(), listItem.getDueDate(), statusValue);
                         };
-                        /*
-                        if(dropDownMenu.selectedIndex > 0) {
-                            console.log("SELECTED!");
-                            statusItemElement.textContent = "";
-                            let statusValue = dropDownMenu.value;
-                            let statElement = document.createTextNode(statusValue);
-                            statusItemElement.appendChild(statElement);
-                            if(statusValue === "complete"){statusItemElement.style.color = '#19c8ff';}
-                            else{statusItemElement.style.color = 'coral';}
-                        }
-                        */
-                }}}>{listItem.status}</div>
+                    }
+                }}>{listItem.status}</div>
                 <div className='item-col test-4-col'></div>
                 <div className='item-col list-controls-col'>
-                    <KeyboardArrowUp className='list-item-control todo-button' />
-                    <KeyboardArrowDown className='list-item-control todo-button' />
-                    <Close className='list-item-control todo-button' />
+                    <KeyboardArrowUp className='list-item-control todo-button' id = {"upArrow-"+listItem.id}
+                    onMouseDown = {() => {
+                        this.props.moveItemUp(listItem.id);
+                    }}/>
+                    <KeyboardArrowDown className='list-item-control todo-button' id = {"downArrow-"+listItem.id}
+                    onMouseDown = {() => {
+                        this.props.moveItemDown(listItem.id);
+                    }}/>
+                    <Close className='list-item-control todo-button' 
+                    onMouseDown = {() => {
+                        this.props.deleteListItem(listItem.id);
+                    }}/>
                     <div className='list-item-control'></div>
-        <div className='list-item-control'></div>
+                    <div className='list-item-control'></div>
                 </div>
             </div>
         )

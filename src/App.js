@@ -20,6 +20,9 @@ class App extends Component {
     console.log("App constructor");
     this.deleteListMod = this.deleteListMod.bind(this);
     this.addNewItem = this.addNewItem.bind(this);
+    this.moveItemUp = this.moveItemUp.bind(this);
+    this.moveItemDown = this.moveItemDown.bind(this);
+    this.deleteListItem = this.deleteListItem.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
     this.tps = new jsTPS();
 
@@ -107,8 +110,9 @@ class App extends Component {
   makeNewToDoListItem = () =>  {
     let newToDoListItem = {
       description: "No Description",
-      dueDate: "none",
-      status: "incomplete"
+      dueDate: "Enter Date",
+      status: "incomplete",
+      id: this.state.nextListItemId
     };
     return newToDoListItem;
   }
@@ -155,9 +159,75 @@ class App extends Component {
       newList.items.push(this.makeNewToDoListItem());
       //newList.unshift(this.makeNewToDoListItem());//append a new Item!
       this.setState({
-        currentList: newList
+        currentList: newList,
+        nextListItemId: this.state.nextListItemId + 1
       });
     } 
+  }
+  moveItemUp(itemId)
+  {
+    //console.log("Move Item Up! at id: " + itemId);
+    if(itemId != this.state.currentList.items[0].id)//if not first one
+    {
+      let currList = this.state.currentList.items;
+      let newList = this.state.currentList;
+      for(let i = 0; i<currList.length; i++)
+      {
+        if(currList[i].id === itemId)//found the one
+        {
+          let prevItem = newList.items[i-1];
+          newList.items[i-1] = currList[i];
+          newList.items[i] = prevItem;
+          i = currList.length + 1;
+        }
+      }
+      this.setState({
+        currentList: newList
+      });
+    }
+    else
+    {
+      //make arrow color black (fool proof design);
+    }
+  }
+  moveItemDown(itemId)
+  {
+    if(itemId != this.state.currentList.items[this.state.currentList.items.length-1].id)//if not first one
+    {
+      let currList = this.state.currentList.items;
+      let newList = this.state.currentList;
+      for(let i = 1; i<currList.length; i++)
+      {
+        if(currList[i-1].id === itemId)//found the one
+        {
+          let nextItem = newList.items[i];
+          newList.items[i] = currList[i-1];
+          newList.items[i-1] = nextItem;
+          i = currList.length + 1;
+        }
+      }
+      this.setState({
+        currentList: newList
+      });
+    }
+    else
+    {
+      //make arrow color black (fool proof design);
+    }
+  }
+  deleteListItem(itemId)
+  {
+    let currList = this.state.currentList.items;
+    if(currList.length > 0)
+    {
+      let nextList = this.state.currentList;
+      nextList.items = nextList.items.filter(testItem =>
+        testItem.id !== itemId
+      );
+      this.setState({
+        currentList: nextList
+      });
+    }
   }
   render() {
     let items;
@@ -176,6 +246,9 @@ class App extends Component {
           toDoListItems={items} 
           deleteListMod = {this.deleteListMod}
           addNewItem = {this.addNewItem}
+          moveItemUp = {this.moveItemUp}
+          moveItemDown = {this.moveItemDown}
+          deleteListItem = {this.deleteListItem}
         />
       </div>
     );
