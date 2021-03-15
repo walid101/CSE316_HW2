@@ -70,6 +70,7 @@ class Workspace extends Component {
                         moveItemUp = {myProps.moveItemUp}
                         moveItemDown = {myProps.moveItemDown}
                         deleteListItem = {myProps.deleteListItem}
+                        addNewCloseTransaction = {myProps.addNewCloseTransaction}
                     />))
                 }
                 </div>

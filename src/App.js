@@ -10,6 +10,8 @@ import Workspace from './components/Workspace'
 
 //IMPORT TRANSACTIONS HERE
 import AddNewItem_Transaction from './transactions/AddNewItem_Transaction'
+import AddNewClose_Transaction from './transactions/AddNewClose_Transaction'
+
 {/*import ItemsListHeaderComponent from './components/ItemsListHeaderComponent'
 import ItemsListComponent from './components/ItemsListComponent'
 import ListsComponent from './components/ListsComponent'
@@ -27,6 +29,8 @@ class App extends Component {
     this.moveItemDown = this.moveItemDown.bind(this);
     this.deleteListItem = this.deleteListItem.bind(this);
     this.addNewItem = this.addNewItem.bind(this);
+    this.addNewCloseTransaction = this.addNewCloseTransaction.bind(this);
+    this.revertClose = this.revertClose.bind(this);
     this.undo = this.undo.bind(this);
     this.redo = this.redo.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
@@ -241,7 +245,51 @@ class App extends Component {
     this.tps.addTransaction(transaction);
   }
 
-
+  addNewCloseTransaction(itemId)
+  {
+    let items = null;
+    let index = -1;
+    let currList = this.state.currentList.items;
+    for(let i = 0; i<currList.length; i++)
+    {
+      if(currList[i].id === itemId)//found
+      {
+        items = currList[i];
+        index = i;
+        i = currList.length + 1;
+      }
+    }
+    console.log("itemId: " + itemId);
+    console.log("itemIndex: " + index);
+    console.log("itemsDesc: " + items.description);
+    let transaction = new AddNewClose_Transaction(this, items, index);
+    this.tps.addTransaction(transaction);
+  }
+  revertClose(items, index)
+  {
+    //console.log("revert Item Deletion!");
+    let currList = this.state.currentList.items;
+    let newList = this.state.currentList;
+    //newList.items = [...currList[0, index], items, ...currList[index+1]];
+    newList.items = [];
+    let counter = 0;
+    for(let i = 0; i<currList.length + 1; i++)
+    {
+      if(index !== i)
+      {
+        newList.items.push(currList[counter]);
+        counter++;
+      }
+      else
+      {
+        newList.items.push(items);
+      }
+    }
+    //console.log("newItems: " + newList.items);
+    this.setState({
+      currentList: newList
+    });
+  }
 
   /**
      * Undo the most recently done transaction if there is one.
@@ -279,6 +327,7 @@ class App extends Component {
           moveItemUp = {this.moveItemUp}
           moveItemDown = {this.moveItemDown}
           deleteListItem = {this.deleteListItem}
+          addNewCloseTransaction = {this.addNewCloseTransaction}
           undo = {this.undo}
           redo = {this.redo}
         />

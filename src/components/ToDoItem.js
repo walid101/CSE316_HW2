@@ -159,7 +159,7 @@ class ToDoItem extends Component {
                     }}/>
                     <Close className='list-item-control todo-button' 
                     onMouseDown = {() => {
-                        this.props.deleteListItem(listItem.id);
+                        this.props.addNewCloseTransaction(listItem.id);
                     }}/>
                     <div className='list-item-control'></div>
                     <div className='list-item-control'></div>
