@@ -14,7 +14,6 @@ class Workspace extends Component {
 
     render() {
         let myProps = this.props;
-        let thisEx = this;
         return (
             <div id="workspace">
                 <div id = "delete_modal" class = "modal">
@@ -34,7 +33,11 @@ class Workspace extends Component {
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
                         <Undo id="undo-button" className="list-item-control material-icons todo-button" />
                         <Redo id="redo-button" className="list-item-control material-icons todo-button" />
-                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" />
+                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" 
+                        onClick = {() => {
+                            //we need to change the state by sending a singal to app
+                            this.props.addNewItem();
+                        }}/>
                         <Delete id="delete-list-button" className="list-item-control material-icons todo-button" 
                         onClick = {() => {
                             let modalPop = document.getElementById('delete_modal');

@@ -19,6 +19,7 @@ class App extends Component {
     // DISPLAY WHERE WE ARE
     console.log("App constructor");
     this.deleteListMod = this.deleteListMod.bind(this);
+    this.addNewItem = this.addNewItem.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
     this.tps = new jsTPS();
 
@@ -128,16 +129,16 @@ class App extends Component {
     //once we implement fool proof design ^ probably wont be needed
     if(this.state.currentList != null)
     {
-      const nextLists = this.state.toDoLists.filter(testList =>
+      let nextLists = this.state.toDoLists.filter(testList =>
         testList.id !== this.state.currentList.id
       );
       //list gone
       //nextLists.unshift(toDoList);//list of lists
       //We want to always make sure top list is colored, rest is black! How to get the div elem?
       
-      for(let i = 0; i<this.state.toDoLists.length; i++)
+      for(let i = 0; i<nextLists.length; i++)
       {
-        this.state.toDoLists[i].color = '#353a44';
+        nextLists[i].color = '#353a44';
       }
       
       this.setState({
@@ -145,6 +146,18 @@ class App extends Component {
         currentList: null
       });
     }
+  }
+  addNewItem()
+  {
+    if(this.state.currentList!=null)
+    {
+      let newList = this.state.currentList;
+      newList.items.push(this.makeNewToDoListItem());
+      //newList.unshift(this.makeNewToDoListItem());//append a new Item!
+      this.setState({
+        currentList: newList
+      });
+    } 
   }
   render() {
     let items;
@@ -162,6 +175,7 @@ class App extends Component {
         <Workspace 
           toDoListItems={items} 
           deleteListMod = {this.deleteListMod}
+          addNewItem = {this.addNewItem}
         />
       </div>
     );
