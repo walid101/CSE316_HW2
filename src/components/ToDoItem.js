@@ -32,6 +32,7 @@ class ToDoItem extends Component {
                 onMouseDown = { () => {
                     let taskItemElement = document.getElementById("task-item-" + listItem.id);
                     if (taskItemElement.childElementCount === 0) {
+                        let preValText = listItem.description;
                         let textField = document.createElement("input");
                         textField.setAttribute("id", "task-item-tf-" + listItem.id);
                         textField.setAttribute("type", "text");
@@ -54,7 +55,7 @@ class ToDoItem extends Component {
                                 //this.removeAllChildNodes("task-item-" + listItem.id);
                                 let textElement = document.createTextNode(text);
                                 taskItemElement.appendChild(textElement);
-                                listItem.description = text;
+                                this.props.addNewTaskTransaction(listItem.id, text, preValText);
                             }
                         };
                         textField.onchange = (event) => {
@@ -63,7 +64,7 @@ class ToDoItem extends Component {
                             let text = textField.value;
                             let textElement = document.createTextNode(text);
                             taskItemElement.appendChild(textElement);
-                            listItem.description = text;
+                            this.props.addNewTaskTransaction(listItem.id, text, preValText);
                             //taskItemElement.textContent = "";
                             //let textElement = document.createTextNode(text);
                             //taskItemElement.appendChild(textElement);
@@ -77,6 +78,7 @@ class ToDoItem extends Component {
                 //console.log("THE ID IS: " + listItem.id);
                 let dueDateItemElement = document.getElementById("due-date-item-" + listItem.id);
                 if (dueDateItemElement.childElementCount === 0) {
+                    let prevDue = listItem.due_date;
                     dueDateItemElement.textContent = "";
                     console.log("in if statement!");
                     let datePicker = document.createElement("input");
@@ -95,7 +97,7 @@ class ToDoItem extends Component {
                             // Trigger the button element with a click
                             let dateValue = datePicker.value;
                             //this.controller.handleUpdateItem(listItem, listItem.getDescription(), dateValue, listItem.getStatus());
-                            listItem.dueDate = dateValue;
+                            this.props.addNewDateTransaction(listItem.id, dateValue,  listItem.due_date);
                         }
                     };
                     datePicker.onchange = () => {
@@ -105,7 +107,7 @@ class ToDoItem extends Component {
                         let dateElement = document.createTextNode(date);
                         dueDateItemElement.textContent = "";
                         dueDateItemElement.appendChild(dateElement);
-                        listItem.due_date = date;
+                        this.props.addNewDateTransaction(listItem.id, date, listItem.due_date);
                         //let dateValue = datePicker.value;
                         //this.controller.handleUpdateItem(listItem, listItem.getDescription(), dateValue, listItem.getStatus());
                     };
@@ -121,16 +123,23 @@ class ToDoItem extends Component {
                         dropDownMenu.setAttribute("id", "status-item-dd-" + listItem.id);
                         dropDownMenu.setAttribute("value", "" + listItem.status);
                         let completed = document.createElement("option");
-                        completed.setAttribute("value", "Complete");
+                        completed.setAttribute("value", "complete");
                         completed.appendChild(document.createTextNode("complete"));
                         dropDownMenu.appendChild(completed);
                         let incomplete = document.createElement("option");
-                        incomplete.setAttribute("value", "Incomplete");
+                        incomplete.setAttribute("value", "incomplete");
                         incomplete.appendChild(document.createTextNode("incomplete"));
                         dropDownMenu.appendChild(incomplete);
                         dropDownMenu.value = listItem.status;
                         //this.removeAllChildNodes("status-item-" + listItem.id);
                         //statusItemElement.textContent = "";
+                        if(listItem.status === "complete" || listItem.status === "Complete")
+                        {
+                            statusItemElement.style.color = "#19c8ff";
+                        }
+                        else{
+                            statusItemElement.style.color = "yellow";
+                        }
                         statusItemElement.appendChild(dropDownMenu);
                         dropDownMenu.onchange = () => {
                             // REMOVE THE TEXT FIELD
@@ -139,9 +148,9 @@ class ToDoItem extends Component {
                             let statusValue = dropDownMenu.value;
                             let statElement = document.createTextNode(statusValue);
                             statusItemElement.appendChild(statElement);
-                            if(statusValue === "Complete"){statusItemElement.style.color = '#19c8ff';}
+                            if(statusValue === "complete"){statusItemElement.style.color = '#19c8ff';}
                             else{statusItemElement.style.color = 'coral';}
-                            listItem.status = statusValue;
+                            this.props.addNewStatTransaction(listItem.id, statusValue, listItem.status);
                             //SAVE VAL
                             //this.controller.handleUpdateItem(listItem, listItem.getDescription(), listItem.getDueDate(), statusValue);
                         };
@@ -151,7 +160,7 @@ class ToDoItem extends Component {
                 <div className='item-col list-controls-col'>
                     <KeyboardArrowUp className='list-item-control todo-button' id = {"upArrow-"+listItem.id}
                     onMouseDown = {() => {
-                        this.props.moveItemUp(listItem.id);
+                        this.props.addNewUpTransaction(listItem.id);
                     }}/>
                     <KeyboardArrowDown className='list-item-control todo-button' id = {"downArrow-"+listItem.id}
                     onMouseDown = {() => {

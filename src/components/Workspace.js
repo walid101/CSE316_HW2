@@ -58,7 +58,10 @@ class Workspace extends Component {
                                 myProps.deleteListMod();
                             }
                         }}/>
-                        <Close id="close-list-button" className="list-item-control material-icons todo-button" />
+                        <Close id="close-list-button" className="list-item-control material-icons todo-button" 
+                        onMouseDown = {() => {
+                            this.props.closeList();
+                        }}/>
                     </div>
                 </div>
                 <div id="todo-list-items-div">
@@ -71,6 +74,10 @@ class Workspace extends Component {
                         moveItemDown = {myProps.moveItemDown}
                         deleteListItem = {myProps.deleteListItem}
                         addNewCloseTransaction = {myProps.addNewCloseTransaction}
+                        addNewTaskTransaction = {myProps.addNewTaskTransaction}
+                        addNewDateTransaction = {myProps.addNewDateTransaction}
+                        addNewStatTransaction = {myProps.addNewStatTransaction}
+                        addNewUpTransaction = {myProps.addNewUpTransaction}
                     />))
                 }
                 </div>

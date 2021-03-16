@@ -11,6 +11,10 @@ import Workspace from './components/Workspace'
 //IMPORT TRANSACTIONS HERE
 import AddNewItem_Transaction from './transactions/AddNewItem_Transaction'
 import AddNewClose_Transaction from './transactions/AddNewClose_Transaction'
+import AddNewTask_Transaction from './transactions/AddNewTask_Transaction'
+import AddNewDate_Transaction from './transactions/AddNewDate_Transaction'
+import AddNewStat_Transaction from './transactions/AddNewStat_Transaction'
+import AddNewUp_Transaction from './transactions/AddNewUp_Transaction'
 
 {/*import ItemsListHeaderComponent from './components/ItemsListHeaderComponent'
 import ItemsListComponent from './components/ItemsListComponent'
@@ -33,6 +37,19 @@ class App extends Component {
     this.revertClose = this.revertClose.bind(this);
     this.undo = this.undo.bind(this);
     this.redo = this.redo.bind(this);
+    this.closeList = this.closeList.bind(this);
+    this.addNewTaskTransaction = this.addNewTaskTransaction.bind(this);
+    this.addNewTask = this.addNewTask.bind(this);
+    this.revertTask = this.revertTask.bind(this);
+    this.addNewDateTransaction = this.addNewDateTransaction.bind(this);
+    this.addNewDue = this.addNewDue.bind(this);
+    this.revertDue = this.revertDue.bind(this);
+    this.addNewStatTransaction = this.addNewStatTransaction.bind(this);
+    this.addNewStat = this.addNewStat.bind(this);
+    this.revertStat = this.revertStat.bind(this);
+    this.addNewUpTransaction = this.addNewUpTransaction.bind(this);
+    this.moveItemUp = this.moveItemUp.bind(this);
+    this.moveItemDown = this.moveItemDown.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
     this.tps = new jsTPS();
 
@@ -290,7 +307,90 @@ class App extends Component {
       currentList: newList
     });
   }
+  closeList()
+  {
+    let mainList = this.state.toDoLists;
+    for(let i = 0; i<mainList.length; i++)
+    {
+      mainList[i].color = "#353a44";
+    }
+    this.setState({
+      toDoLists: mainList,
+      currentList: null
+    });
+  }
 
+  addNewTaskTransaction(itemId, currDesc, prevDesc)
+  {
+    let transaction = new AddNewTask_Transaction(this, itemId, currDesc, prevDesc);
+    this.tps.addTransaction(transaction);
+  }
+  addNewTask(itemId, currDesc)
+  {
+    let newList = this.state.currentList;
+    newList.items[itemId].description = currDesc;
+    this.setState({
+      currentList: newList
+    });
+  }
+  revertTask(itemId, prevDesc)
+  {
+    let newList = this.state.currentList;
+    newList.items[itemId].description = prevDesc;
+    this.setState({
+      currentList: newList
+    });
+  }
+
+  addNewDateTransaction(itemId, currDue, prevDue)
+  {
+    let transaction = new AddNewDate_Transaction(this, itemId, currDue, prevDue);
+    this.tps.addTransaction(transaction);
+  }
+  addNewDue(itemId, currDue)
+  {
+    let newList = this.state.currentList;
+    newList.items[itemId].due_date = currDue;
+    this.setState({
+      currentList: newList
+    });
+  }
+  revertDue(itemId, prevDue)
+  {
+    let newList = this.state.currentList;
+    newList.items[itemId].due_date = prevDue;
+    this.setState({
+      currentList: newList
+    });
+  }
+
+  addNewStatTransaction(itemId, currStat, prevStat)
+  {
+    let transaction = new AddNewStat_Transaction(this, itemId, currStat, prevStat);
+    this.tps.addTransaction(transaction);
+  }
+  addNewStat(itemId, currStat)
+  {
+    let newList = this.state.currentList;
+    newList.items[itemId].status = currStat;
+    this.setState({
+      currentList: newList
+    });
+  }
+  revertStat(itemId, prevStat)
+  {
+    let newList = this.state.currentList;
+    newList.items[itemId].status = prevStat;
+    this.setState({
+      currentList: newList
+    });
+  }
+
+  addNewUpTransaction(itemId)
+  {
+    let transaction = new AddNewUp_Transaction(this, itemId);
+    this.tps.addTransaction(transaction);
+  }
   /**
      * Undo the most recently done transaction if there is one.
      */
@@ -330,6 +430,11 @@ class App extends Component {
           addNewCloseTransaction = {this.addNewCloseTransaction}
           undo = {this.undo}
           redo = {this.redo}
+          closeList = {this.closeList}
+          addNewTaskTransaction = {this.addNewTaskTransaction}
+          addNewDateTransaction = {this.addNewDateTransaction}
+          addNewStatTransaction = {this.addNewStatTransaction}
+          addNewUpTransaction = {this.addNewUpTransaction}
         />
       </div>
     );
