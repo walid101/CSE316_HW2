@@ -34,19 +34,16 @@ class ListLink extends Component {
                     let redoButton = document.getElementById("redo-button");
                     let undoButton = document.getElementById("undo-button");
                     let closeButton =  document.getElementById("close-list-button");
+                    let addListButton = document.getElementById("add-list-button");
                     delButton.style.color = "white";
                     redoButton.style.color = "white";
                     undoButton.style.color = "white";
                     closeButton.style.color = "white";
-                    console.log("Item: " , myProps.toDoList.items[0].id);
+                    addListButton.style.color = "black";
                     /*let firstUpArr = document.getElementById("upArrow-"+myProps.toDoList.items[0].id);
                     let lastUpArr = document.getElementById("downArrow-"+myProps.toDoList.items[myProps.toDoList.items.length-1].id);
                     firstUpArr.style.color = "black";
                     lastUpArr.style.color = "black";*/
-                }}
-                onMouseDown = 
-                {() => {
-                    console.log("ItemSB: " , myProps.toDoList.items[0].id);
                 }}
                 style = {{background: this.props.toDoList.color}}
             >

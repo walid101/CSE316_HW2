@@ -91,7 +91,9 @@ class Workspace extends Component {
                             let redoButton = document.getElementById("redo-button");
                             let undoButton = document.getElementById("undo-button");
                             let closeButton =  document.getElementById("close-list-button");
+                            let addListButton = document.getElementById("add-list-button");
 
+                            addListButton.style.color = "#ffc819";
                             addButton.style.color = "black";
                             delButton.style.color = "black";
                             redoButton.style.color = "black";

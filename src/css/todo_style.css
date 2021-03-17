@@ -19,6 +19,7 @@
 #root {
     background-color: var(--swatch-foundation);
     font-family: var(--font-primary);
+    display: flex;
 }
 
 #navbar {
@@ -48,6 +49,7 @@
 
 #workspace {
     background-color: var(--swatch-primary);
+    display: flex;
     color: rgb(233,237,240);
 }
 
@@ -97,6 +99,7 @@
 
 #add-list-button {
     color: var(--swatch-accent);
+    padding-left: 25px;
 }
 
 .status-incomplete {

@@ -21,6 +21,10 @@ class ToDoItem extends Component {
         {
             document.getElementById("upArrow-"+this.props.toDoListItem.id).style.color = "black";
         }
+        if(this.props.toDoListItem.id === this.props.items[this.props.items.length - 1].id)
+        {
+            document.getElementById("downArrow-"+this.props.toDoListItem.id).style.color = "black";
+        }
     }
 
     render() {
@@ -32,6 +36,8 @@ class ToDoItem extends Component {
             statusType = "status-incomplete";
         console.log("props child: " + this.props.children);
         let uArrow = document.getElementById("upArrow-"+listItem.id);
+        let dArrow = document.getElementById("downArrow-"+this.props.toDoListItem.id);
+
         if(uArrow != null)
         {
             if(listItem.id === this.props.items[0].id)
@@ -41,6 +47,17 @@ class ToDoItem extends Component {
             else
             {
                 uArrow.style.color = "white";
+            }
+        }
+        if(dArrow != null)
+        {
+            if(listItem.id === this.props.items[this.props.items.length-1].id)
+            {
+                dArrow.style.color = "black";
+            }
+            else
+            {
+                dArrow.style.color = "white";
             }
         }
         return (

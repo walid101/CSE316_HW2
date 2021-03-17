@@ -86,6 +86,9 @@ class App extends Component {
       nextListItemId: highListItemId+1,
       useVerboseFeedback: true
     }
+    this.setState({
+      currentList: null
+    });
   }
 
   // WILL LOAD THE SELECTED LIST
@@ -114,16 +117,19 @@ class App extends Component {
   }
 
   addNewList = () => {
-    let newToDoListInList = [this.makeNewToDoList()];
-    //[...newToDoListInList, ...this.state.toDoLists];
-    let newToDoListsList = [...newToDoListInList, ...this.state.toDoLists];
-    let newToDoList = newToDoListsList[0];
-    // AND SET THE STATE, WHICH SHOULD FORCE A render
-    this.setState({
-      toDoLists: newToDoListsList,
-      currentList: newToDoList,
-      nextListId: this.state.nextListId+1
-    }, this.afterToDoListsChangeComplete);
+    if(this.state.currentList == null)
+    {
+      let newToDoListInList = [this.makeNewToDoList()];
+      //[...newToDoListInList, ...this.state.toDoLists];
+      let newToDoListsList = [...newToDoListInList, ...this.state.toDoLists];
+      let newToDoList = newToDoListsList[0];
+      // AND SET THE STATE, WHICH SHOULD FORCE A render
+      this.setState({
+        toDoLists: newToDoListsList,
+        currentList: newToDoList,
+        nextListId: this.state.nextListId+1
+      }, this.afterToDoListsChangeComplete);
+    }
   }
 
   makeNewToDoList = () => {
@@ -425,6 +431,7 @@ class App extends Component {
       <div id="root">
         <Navbar />
         <LeftSidebar 
+          toDoListItems={items} 
           toDoLists={this.state.toDoLists}
           loadToDoListCallback={this.loadToDoList}
           addNewListCallback={this.addNewList}
