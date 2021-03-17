@@ -81,14 +81,11 @@ class App extends Component {
     // SETUP OUR APP STATE
     this.state = {
       toDoLists: recentLists,
-      currentList: {items: []},
+      currentList: null,
       nextListId: highListId+1,
       nextListItemId: highListItemId+1,
       useVerboseFeedback: true
     }
-    this.setState({
-      currentList: null
-    });
   }
 
   // WILL LOAD THE SELECTED LIST
@@ -117,6 +114,8 @@ class App extends Component {
   }
 
   addNewList = () => {
+    console.log("Add New List!");
+    console.log("currentList: " + this.state.currentList);
     if(this.state.currentList == null)
     {
       let newToDoListInList = [this.makeNewToDoList()];
@@ -126,7 +125,7 @@ class App extends Component {
       // AND SET THE STATE, WHICH SHOULD FORCE A render
       this.setState({
         toDoLists: newToDoListsList,
-        currentList: newToDoList,
+        currentList: null,
         nextListId: this.state.nextListId+1
       }, this.afterToDoListsChangeComplete);
     }
