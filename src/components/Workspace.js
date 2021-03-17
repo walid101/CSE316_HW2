@@ -31,20 +31,35 @@ class Workspace extends Component {
                     <div id="date-col-header" className="item-col todo-button">Due Date</div>
                     <div id="status-col-header" className="item-col todo-button">Status</div>
                     <div className="item-col" display="flex" flexDirection="row" flexWrap="nowrap">
-                        <Undo id="undo-button" className="list-item-control material-icons todo-button" 
+                        <Undo id="undo-button" className="list-item-control material-icons todo-button" style = {{color: "black"}}
                         onMouseDown = {() => {
-                            this.props.undo();
+                            let undoButton = document.getElementById("undo-button");
+                            if(this.props.hasTransactionUndo)
+                            {
+                                undoButton.style.color = "white";
+                                this.props.undo();
+                                if(this.props.hasTransactionUndo === false)
+                                {
+                                    console.log("No Undo!");
+                                    undoButton.style.color = "black";
+                                }
+                                console.log("undo Func Finished!");
+                            }
+                            else
+                            {
+                                undoButton.style.color = "black";
+                            }
                         }}/>
-                        <Redo id="redo-button" className="list-item-control material-icons todo-button" 
+                        <Redo id="redo-button" className="list-item-control material-icons todo-button" style = {{color: "black"}}
                         onMouseDown = {() => {
                             this.props.redo();
                         }}/>
-                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" 
+                        <AddBox id="add-item-button" className="list-item-control material-icons todo-button" style = {{color: "black"}}
                         onClick = {() => {
                             //we need to change the state by sending a singal to app
                             this.props.addNewItemTransaction();
                         }}/>
-                        <Delete id="delete-list-button" className="list-item-control material-icons todo-button" 
+                        <Delete id="delete-list-button" className="list-item-control material-icons todo-button" style = {{color: "black"}}
                         onClick = {() => {
                             let modalPop = document.getElementById('delete_modal');
                             modalPop.style.display = 'block';
@@ -54,12 +69,34 @@ class Workspace extends Component {
                                 modalPop.style.display = 'none';
                             }
                             yesBtn.onmousedown = function () {
+                                let addButton = document.getElementById("add-item-button");
+                                let delButton = document.getElementById("delete-list-button");
+                                let redoButton = document.getElementById("redo-button");
+                                let undoButton = document.getElementById("undo-button");
+                                let closeButton =  document.getElementById("close-list-button");
+
+                                addButton.style.color = "black";
+                                delButton.style.color = "black";
+                                redoButton.style.color = "black";
+                                undoButton.style.color = "black";
+                                closeButton.style.color = "black";
                                 modalPop.style.display = 'none';
                                 myProps.deleteListMod();
                             }
                         }}/>
-                        <Close id="close-list-button" className="list-item-control material-icons todo-button" 
+                        <Close id="close-list-button" className="list-item-control material-icons todo-button" style = {{color: "black"}}
                         onMouseDown = {() => {
+                            let addButton = document.getElementById("add-item-button");
+                            let delButton = document.getElementById("delete-list-button");
+                            let redoButton = document.getElementById("redo-button");
+                            let undoButton = document.getElementById("undo-button");
+                            let closeButton =  document.getElementById("close-list-button");
+
+                            addButton.style.color = "black";
+                            delButton.style.color = "black";
+                            redoButton.style.color = "black";
+                            undoButton.style.color = "black";
+                            closeButton.style.color = "black";
                             this.props.closeList();
                         }}/>
                     </div>
@@ -78,6 +115,7 @@ class Workspace extends Component {
                         addNewDateTransaction = {myProps.addNewDateTransaction}
                         addNewStatTransaction = {myProps.addNewStatTransaction}
                         addNewUpTransaction = {myProps.addNewUpTransaction}
+                        items = {myProps.toDoListItems}
                     />))
                 }
                 </div>

@@ -52,7 +52,8 @@ class App extends Component {
     this.moveItemDown = this.moveItemDown.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
     this.tps = new jsTPS();
-
+    //this.hasTransactionUndo = this.tps.hasTransactionToUndo.bind(this);
+    //this.hasTransactionRedo = this.tps.hasTransactionToRedo.bind(this);
     // CHECK TO SEE IF THERE IS DATA IN LOCAL STORAGE FOR THIS APP
     let recentLists = localStorage.getItem("recentLists");
     console.log("recentLists: " + recentLists);
@@ -109,6 +110,7 @@ class App extends Component {
       toDoLists: nextLists,
       currentList: toDoList
     });
+    return toDoList.items;
   }
 
   addNewList = () => {
@@ -215,6 +217,7 @@ class App extends Component {
     else
     {
       //make arrow color black (fool proof design);
+      //document.getElementById("upArrow-"+this.state.currentList.items[0].id).style.color = "black";
     }
   }
   moveItemDown(itemId)
@@ -244,16 +247,19 @@ class App extends Component {
   }
   deleteListItem(itemId)
   {
-    let currList = this.state.currentList.items;
-    if(currList.length > 0)
+    if(this.state.currentList != null)
     {
-      let nextList = this.state.currentList;
-      nextList.items = nextList.items.filter(testItem =>
-        testItem.id !== itemId
-      );
-      this.setState({
-        currentList: nextList
-      });
+      let currList = this.state.currentList.items;
+      if(currList.length > 0)
+      {
+        let nextList = this.state.currentList;
+        nextList.items = nextList.items.filter(testItem =>
+          testItem.id !== itemId
+        );
+        this.setState({
+          currentList: nextList
+        });
+      }
     }
   }
   addNewItemTransaction()
@@ -391,10 +397,12 @@ class App extends Component {
     let transaction = new AddNewUp_Transaction(this, itemId);
     this.tps.addTransaction(transaction);
   }
+  
   /**
      * Undo the most recently done transaction if there is one.
      */
    undo() {
+    console.log("transaction to undo? : " + this.tps.hasTransactionToUndo() === true);
     if (this.tps.hasTransactionToUndo()) {
         this.tps.undoTransaction();
     }
@@ -412,6 +420,7 @@ class App extends Component {
     if(this.state.currentList != null)
     {items = this.state.currentList.items;}
     else{items = [];}
+    //let list = this.state.currentList;
     return (
       <div id="root">
         <Navbar />
@@ -435,6 +444,8 @@ class App extends Component {
           addNewDateTransaction = {this.addNewDateTransaction}
           addNewStatTransaction = {this.addNewStatTransaction}
           addNewUpTransaction = {this.addNewUpTransaction}
+          hasTransactionUndo = {this.tps.hasTransactionToUndo}
+          hasTransactionRedo = {this.tps.hasTransactionToRedo}
         />
       </div>
     );
