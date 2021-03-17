@@ -81,7 +81,7 @@ class App extends Component {
     // SETUP OUR APP STATE
     this.state = {
       toDoLists: recentLists,
-      currentList: null,
+      currentList: null,//{items: []},
       nextListId: highListId+1,
       nextListItemId: highListItemId+1,
       useVerboseFeedback: true
@@ -142,6 +142,7 @@ class App extends Component {
   }
 
   makeNewToDoListItem = () =>  {
+    console.log("currentID: " + this.state.nextListItemId);
     let newToDoListItem = {
       description: "No Description",
       dueDate: "Enter Date",
@@ -252,6 +253,7 @@ class App extends Component {
   }
   deleteListItem(itemId)
   {
+    console.log("current List Item Id: " + this.state.nextListItemId);
     if(this.state.currentList != null)
     {
       let currList = this.state.currentList.items;
@@ -262,7 +264,8 @@ class App extends Component {
           testItem.id !== itemId
         );
         this.setState({
-          currentList: nextList
+          currentList: nextList,
+          nextListItemId: this.state.nextListItemId-1
         });
       }
     }
@@ -338,8 +341,18 @@ class App extends Component {
   }
   addNewTask(itemId, currDesc)
   {
+    //console.log("ItemId: " + itemId);
     let newList = this.state.currentList;
-    newList.items[itemId].description = currDesc;
+    let index = -1;
+    for(let i = 0; i<newList.items.length; i++)
+    {
+      if(newList.items[i].id === itemId)
+      {
+        index = i;
+        i = newList.items.length;
+      }
+    }
+    newList.items[index].description = currDesc;
     this.setState({
       currentList: newList
     });
@@ -347,7 +360,16 @@ class App extends Component {
   revertTask(itemId, prevDesc)
   {
     let newList = this.state.currentList;
-    newList.items[itemId].description = prevDesc;
+    let index = -1;
+    for(let i = 0; i<newList.items.length; i++)
+    {
+      if(newList.items[i].id === itemId)
+      {
+        index = i;
+        i = newList.items.length;
+      }
+    }
+    newList.items[index].description = prevDesc;
     this.setState({
       currentList: newList
     });
@@ -361,7 +383,16 @@ class App extends Component {
   addNewDue(itemId, currDue)
   {
     let newList = this.state.currentList;
-    newList.items[itemId].due_date = currDue;
+    let index = -1;
+    for(let i = 0; i<newList.items.length; i++)
+    {
+      if(newList.items[i].id === itemId)
+      {
+        index = i;
+        i = newList.items.length;
+      }
+    }
+    newList.items[index].due_date = currDue;
     this.setState({
       currentList: newList
     });
@@ -369,7 +400,16 @@ class App extends Component {
   revertDue(itemId, prevDue)
   {
     let newList = this.state.currentList;
-    newList.items[itemId].due_date = prevDue;
+    let index = -1;
+    for(let i = 0; i<newList.items.length; i++)
+    {
+      if(newList.items[i].id === itemId)
+      {
+        index = i;
+        i = newList.items.length;
+      }
+    }
+    newList.items[index].due_date = prevDue;
     this.setState({
       currentList: newList
     });
@@ -383,7 +423,16 @@ class App extends Component {
   addNewStat(itemId, currStat)
   {
     let newList = this.state.currentList;
-    newList.items[itemId].status = currStat;
+    let index = -1;
+    for(let i = 0; i<newList.items.length; i++)
+    {
+      if(newList.items[i].id === itemId)
+      {
+        index = i;
+        i = newList.items.length;
+      }
+    }
+    newList.items[index].status = currStat;
     this.setState({
       currentList: newList
     });
@@ -391,7 +440,16 @@ class App extends Component {
   revertStat(itemId, prevStat)
   {
     let newList = this.state.currentList;
-    newList.items[itemId].status = prevStat;
+    let index = -1;
+    for(let i = 0; i<newList.items.length; i++)
+    {
+      if(newList.items[i].id === itemId)
+      {
+        index = i;
+        i = newList.items.length;
+      }
+    }
+    newList.items[index].status = prevStat;
     this.setState({
       currentList: newList
     });
