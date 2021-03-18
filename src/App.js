@@ -15,7 +15,7 @@ import AddNewTask_Transaction from './transactions/AddNewTask_Transaction'
 import AddNewDate_Transaction from './transactions/AddNewDate_Transaction'
 import AddNewStat_Transaction from './transactions/AddNewStat_Transaction'
 import AddNewUp_Transaction from './transactions/AddNewUp_Transaction'
-
+import AddNewDown_Transaction from './transactions/AddNewDown_Transaction'
 {/*import ItemsListHeaderComponent from './components/ItemsListHeaderComponent'
 import ItemsListComponent from './components/ItemsListComponent'
 import ListsComponent from './components/ListsComponent'
@@ -50,6 +50,8 @@ class App extends Component {
     this.addNewUpTransaction = this.addNewUpTransaction.bind(this);
     this.moveItemUp = this.moveItemUp.bind(this);
     this.moveItemDown = this.moveItemDown.bind(this);
+    this.saveToDoListName = this.saveToDoListName.bind(this);
+    this.addNewDownTransaction = this.addNewDownTransaction.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
     this.tps = new jsTPS();
     //this.hasTransactionUndo = this.tps.hasTransactionToUndo.bind(this);
@@ -87,7 +89,10 @@ class App extends Component {
       useVerboseFeedback: true
     }
   }
-
+  saveToDoListName()
+  {
+    this.afterToDoListsChangeComplete();
+  }
   // WILL LOAD THE SELECTED LIST
   loadToDoList = (toDoList) => {
     console.log("loading " + toDoList);
@@ -109,7 +114,7 @@ class App extends Component {
     this.setState({
       toDoLists: nextLists,
       currentList: toDoList
-    });
+    }, this.afterToDoListsChangeComplete);
     return toDoList.items;
   }
 
@@ -158,7 +163,7 @@ class App extends Component {
 
     // WILL THIS WORK? @todo
     let toDoListsString = JSON.stringify(this.state.toDoLists);
-    localStorage.setItem("recent_work", toDoListsString);
+    localStorage.setItem("recentLists", toDoListsString);
   }
 
   deleteListMod()
@@ -183,7 +188,7 @@ class App extends Component {
       this.setState({
         toDoLists: nextLists,
         currentList: null
-      });
+      }, this.afterToDoListsChangeComplete);
     }
   }
   addNewItem()
@@ -196,7 +201,7 @@ class App extends Component {
       this.setState({
         currentList: newList,
         nextListItemId: this.state.nextListItemId + 1
-      });
+      }, this.afterToDoListsChangeComplete);
     } 
   }
   moveItemUp(itemId)
@@ -218,7 +223,7 @@ class App extends Component {
       }
       this.setState({
         currentList: newList
-      });
+      }, this.afterToDoListsChangeComplete);
     }
     else
     {
@@ -244,7 +249,7 @@ class App extends Component {
       }
       this.setState({
         currentList: newList
-      });
+      }, this.afterToDoListsChangeComplete);
     }
     else
     {
@@ -266,7 +271,7 @@ class App extends Component {
         this.setState({
           currentList: nextList,
           nextListItemId: this.state.nextListItemId-1
-        });
+        }, this.afterToDoListsChangeComplete);
       }
     }
   }
@@ -319,7 +324,7 @@ class App extends Component {
     //console.log("newItems: " + newList.items);
     this.setState({
       currentList: newList
-    });
+    }, this.afterToDoListsChangeComplete);
   }
   closeList()
   {
@@ -331,7 +336,7 @@ class App extends Component {
     this.setState({
       toDoLists: mainList,
       currentList: null
-    });
+    }, this.afterToDoListsChangeComplete);
   }
 
   addNewTaskTransaction(itemId, currDesc, prevDesc)
@@ -355,7 +360,7 @@ class App extends Component {
     newList.items[index].description = currDesc;
     this.setState({
       currentList: newList
-    });
+    }, this.afterToDoListsChangeComplete);
   }
   revertTask(itemId, prevDesc)
   {
@@ -372,7 +377,7 @@ class App extends Component {
     newList.items[index].description = prevDesc;
     this.setState({
       currentList: newList
-    });
+    }, this.afterToDoListsChangeComplete);
   }
 
   addNewDateTransaction(itemId, currDue, prevDue)
@@ -395,7 +400,7 @@ class App extends Component {
     newList.items[index].due_date = currDue;
     this.setState({
       currentList: newList
-    });
+    }, this.afterToDoListsChangeComplete);
   }
   revertDue(itemId, prevDue)
   {
@@ -412,7 +417,7 @@ class App extends Component {
     newList.items[index].due_date = prevDue;
     this.setState({
       currentList: newList
-    });
+    }, this.afterToDoListsChangeComplete);
   }
 
   addNewStatTransaction(itemId, currStat, prevStat)
@@ -435,7 +440,7 @@ class App extends Component {
     newList.items[index].status = currStat;
     this.setState({
       currentList: newList
-    });
+    }, this.afterToDoListsChangeComplete);
   }
   revertStat(itemId, prevStat)
   {
@@ -452,12 +457,18 @@ class App extends Component {
     newList.items[index].status = prevStat;
     this.setState({
       currentList: newList
-    });
+    }, this.afterToDoListsChangeComplete);
   }
 
   addNewUpTransaction(itemId)
   {
     let transaction = new AddNewUp_Transaction(this, itemId);
+    this.tps.addTransaction(transaction);
+  }
+
+  addNewDownTransaction(itemId)
+  {
+    let transaction = new AddNewDown_Transaction(this, itemId);
     this.tps.addTransaction(transaction);
   }
   
@@ -488,9 +499,11 @@ class App extends Component {
       <div id="root">
         <Navbar />
         <LeftSidebar 
+          topKey = {this.state.toDoLists[0].id}
           toDoListItems={items} 
           toDoLists={this.state.toDoLists}
           loadToDoListCallback={this.loadToDoList}
+          saveToDoListName = {this.saveToDoListName}
           addNewListCallback={this.addNewList}
         />
         <Workspace 
@@ -508,6 +521,7 @@ class App extends Component {
           addNewDateTransaction = {this.addNewDateTransaction}
           addNewStatTransaction = {this.addNewStatTransaction}
           addNewUpTransaction = {this.addNewUpTransaction}
+          addNewDownTransaction = {this.addNewDownTransaction}
           hasTransactionUndo = {this.tps.hasTransactionToUndo}
           hasTransactionRedo = {this.tps.hasTransactionToRedo}
         />

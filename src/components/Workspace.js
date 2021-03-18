@@ -119,6 +119,7 @@ class Workspace extends Component {
                         addNewDateTransaction = {myProps.addNewDateTransaction}
                         addNewStatTransaction = {myProps.addNewStatTransaction}
                         addNewUpTransaction = {myProps.addNewUpTransaction}
+                        addNewDownTransaction = {myProps.addNewDownTransaction}
                         items = {myProps.toDoListItems}
                     />))
                 }

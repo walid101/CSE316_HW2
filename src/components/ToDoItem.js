@@ -213,7 +213,7 @@ class ToDoItem extends Component {
                     onMouseDown = {() => {
                         let undoButton = document.getElementById("undo-button");
                         undoButton.style.color = "white";
-                        this.props.moveItemDown(listItem.id);
+                        this.props.addNewDownTransaction(listItem.id);
                     }}/>
                     <Close className='list-item-control todo-button' 
                     onMouseDown = {() => {

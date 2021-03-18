@@ -25,7 +25,44 @@ class ListLink extends Component {
         //this is listlink
         return (
             <div 
+                id = {"todo-list-"+myProps.key}
                 className='todo-list-button'
+                onDoubleClick=
+                {()=>{
+                console.log("top Key: " + myProps.topKey);
+                console.log("my key: " + myProps.toDoList.id);
+                if(myProps.topKey === myProps.toDoList.id)
+                {
+                        let taskItemElement = document.getElementById("todo-list-" + myProps.key);
+                        //console.log("List name: " + taskItemElement.textContent);
+                        //let preValText = listItem.description;
+                        let textField = document.createElement("input");
+                        textField.setAttribute("id", "todo-list-tf-" + myProps.toDoList.id);
+                        textField.setAttribute("type", "text");
+                        textField.setAttribute("value", "" + myProps.toDoList.description);
+                        taskItemElement.textContent = "";
+                        //taskItemElement.removeAllChildNodes("task-item-" + listItem.id);                    
+                        taskItemElement.appendChild(textField);
+                        textField.focus();
+                        textField.select();
+                        textField.onkeydown = (event) => {
+                            // Number 13 is the "Enter" key on the keyboard
+                            if (event.code === "Enter") {
+                                // Cancel the default action, if needed
+                                event.preventDefault();
+                                
+                                // Trigger the button element with a click
+                                let text = textField.value;
+                                //this.controller.handleUpdateItem(listItem, text, listItem.getDueDate(), listItem.getStatus());
+                                taskItemElement.textContent = "";
+                                //this.removeAllChildNodes("task-item-" + listItem.id);
+                                let textElement = document.createTextNode(text);
+                                taskItemElement.appendChild(textElement);
+                                myProps.toDoList.name = text;
+                                myProps.saveToDoListName();//myProps.toDoList, text);
+                        }}
+                    }
+                }}
                 onClick=
                 {() => {
                     this.handleLoadList()
@@ -40,10 +77,6 @@ class ListLink extends Component {
                     undoButton.style.color = "white";
                     closeButton.style.color = "white";
                     addListButton.style.color = "black";
-                    /*let firstUpArr = document.getElementById("upArrow-"+myProps.toDoList.items[0].id);
-                    let lastUpArr = document.getElementById("downArrow-"+myProps.toDoList.items[myProps.toDoList.items.length-1].id);
-                    firstUpArr.style.color = "black";
-                    lastUpArr.style.color = "black";*/
                 }}
                 style = {{background: this.props.toDoList.color}}
             >
