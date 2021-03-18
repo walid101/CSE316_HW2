@@ -9,11 +9,9 @@ import { ListItem, ListItemSecondaryAction } from '@material-ui/core';
 class ToDoItem extends Component {
     constructor(props) {
         super(props);
-        
         // DISPLAY WHERE WE ARE
         console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " constructor");
     }
-
     componentDidMount = () => {
         // DISPLAY WHERE WE ARE
         console.log("\t\t\tToDoItem " + this.props.toDoListItem.id + " did mount");
@@ -26,7 +24,11 @@ class ToDoItem extends Component {
             document.getElementById("downArrow-"+this.props.toDoListItem.id).style.color = "black";
         }
     }
-
+    /*
+    componentWillUnmount = () => {
+        document.removeEventListener("keydown", this.onKeyPress, false);
+    }
+    */
     render() {
         // DISPLAY WHERE WE ARE
         console.log("\t\t\tToDoItem render");

@@ -11,6 +11,7 @@ class ListLink extends Component {
     componentDidMount = () => {
         // DISPLAY WHERE WE ARE
         console.log("\t\t\tListLink " + this.props.toDoList.key + " did mount");
+        document.addEventListener("keydown", this.onKeyPress, false);
     }
 
     handleLoadList = () => {

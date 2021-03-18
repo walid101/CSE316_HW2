@@ -121,6 +121,7 @@ class Workspace extends Component {
                         addNewUpTransaction = {myProps.addNewUpTransaction}
                         addNewDownTransaction = {myProps.addNewDownTransaction}
                         items = {myProps.toDoListItems}
+                        undo = {myProps.undo}
                     />))
                 }
                 </div>

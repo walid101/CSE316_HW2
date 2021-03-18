@@ -54,6 +54,8 @@ class App extends Component {
     this.addNewDownTransaction = this.addNewDownTransaction.bind(this);
     // MAKE OUR TRANSACTION PROCESSING SYSTEM
     this.tps = new jsTPS();
+    this.ctrlPress = false;
+    this.counter = 0;
     //this.hasTransactionUndo = this.tps.hasTransactionToUndo.bind(this);
     //this.hasTransactionRedo = this.tps.hasTransactionToRedo.bind(this);
     // CHECK TO SEE IF THERE IS DATA IN LOCAL STORAGE FOR THIS APP
@@ -88,6 +90,30 @@ class App extends Component {
       nextListItemId: highListItemId+1,
       useVerboseFeedback: true
     }
+  }
+  onKeyPress = (event)  =>
+  {
+      if(event.keyCode === 17) {
+          this.ctrlPress = true;
+      }
+      else if(this.ctrlPress === true && event.keyCode === 90)
+      {
+        this.ctrlPress = false;
+        this.undo();
+      }
+      else if(this.ctrlPress === true && event.keyCode === 89)
+      {
+        this.ctrlPress = false;
+        this.redo();
+      }
+  }
+  componentDidMount()
+  {
+    document.addEventListener("keydown", this.onKeyPress, false);
+  }
+  componentWillUnmount()
+  {
+    document.removeEventListener("keydown", this.onKeyPress, false);
   }
   saveToDoListName()
   {
