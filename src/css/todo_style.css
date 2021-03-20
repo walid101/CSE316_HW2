@@ -43,6 +43,7 @@
 
 #todo-list-header-card {
     border-bottom: dotted;
+    border-width: 2px;
     font-size: 14pt;
     font-weight: bold;
 }
@@ -61,10 +62,12 @@
 
 #todo-list-table-header {
     border-bottom: dotted;
+    border-width: 3px;
 }
 
 .list-header-card {
     border-bottom: dotted;
+    border-width: 3px;
 }
 
 .list-item-control {
@@ -75,8 +78,9 @@
     border-bottom: solid;
     border-width: 1px;
     font-weight: bold;
+}.list-item-card :hover{
+    background-color: var(--swatch-complement);
 }
-
 .todo-list-button {
     cursor:pointer;
     background-color: var(--swatch-complement);
@@ -166,4 +170,7 @@
     color:rgba(0,0,0);
     text-decoration: none;
     cursor:pointer;
+}
+.due-date-col {
+    padding-left: 14px;
 }
